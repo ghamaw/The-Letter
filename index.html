@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
     />
-    <title>The Letter That I Never Sent</title>
+    <title>Letter</title>
 
     <link rel="icon" href="data:," />
 
@@ -128,7 +128,6 @@
 
         // Chat HP
         const overlayHp = document.getElementById("overlay-hp");
-        const chatScreen = document.getElementById("chat-screen");
 
         // Dialog Box
         const dialogBox = document.getElementById("dialog-box");
@@ -155,7 +154,7 @@
             src: "assets/images/6.JPG",
             caption: "Yanti menekuni makul sir anton",
           },
-          { src: "assets/images/7.jpg", caption: "Yanti mode ibu2" },
+          { src: "assets/images/7.JPG", caption: "Yanti mode ibu2" },
           { src: "assets/images/8.png", caption: "Yanti lagi jual mahal" },
           {
             src: "assets/images/9.png",
@@ -299,28 +298,36 @@
           else if (endX - startX > 50) showPhoto(currentIndex - 1);
         });
 
+        // ============================
         // Chat HP Logic
+        // ============================
         const chatSequence = [
           { type: "sent", text: "Teh yantiii..." },
           { type: "received", text: "Gimana mas agamm?" },
           { type: "sent", text: "Boleh ngomong sesuatu ga?" },
           { type: "received", text: "Apatuu?" },
           { type: "sent", text: "Tapi jangan marah ya wkw" },
-          { type: "received", text: "iya ga marah" },
-          { type: "received", text: "mau ngomong apa toh mas agam?" },
+          { type: "received", text: "mau ngomong apa toh emangnyaa mas agam?" },
           {
             type: "sent",
             text: "Aku tuh sebenernya dari dulu mau ngomong sesuatu...",
           },
           { type: "sent", text: "Cuman ga pernah kesampean aja" },
-          { type: "sent", text: "Sebenernya, aku tu waktu awal masuk mb-1," },
           {
             type: "sent",
-            text: "pas pertama liat kamu tuh aku kepikiran 'wah orangnya kayak beda aja gitu'.",
+            text: "Sebenernya, aku tu waktu awal masuk kuliah itu, waktu masih ospek",
           },
           {
             type: "sent",
-            text: "Jadi awal2 mah cuman bisa sekedar merhatiin aja, kadang suka ngefoto juga dari jauh wk, maap yaa... tapi udah banyak yang kehapus kok soalnya di hp lama.",
+            text: "pas pertama liat kamu tuh aku kek langsung kepikiran.",
+          },
+          {
+            type: "sent",
+            text: "'wah, orang ini cantiknya beda nih'.",
+          },
+          {
+            type: "sent",
+            text: "Jadi awal2 mah cuman bisa sekedar merhatiin aja, kadang suka ngefoto juga dari jauh wk... tapi beneran udah kehapus kok soalnya di hp lama juga, maap yaa.",
           },
           {
             type: "sent",
@@ -328,34 +335,34 @@
           },
           {
             type: "sent",
-            text: "Aku beberapa kali coba ngajak kamu keluar, tapi emang ga pernah kesampean, kadang harus nunggu lama atau spam chat baru dibales wkw.",
+            text: "Inget ga? ku beberapa kali coba ngajak kamu keluar, tapi ga pernah kesampean. Soalnya kadang harus nunggu lama  atau spam chat baru dibales wkw.",
           },
           {
             type: "sent",
-            text: "Sampe di titik, 'ah ini mah gabakal mau sama aku juga orangnya'.",
+            text: "Sampe di titik, 'ah, ini mah kayaknya emang ga tertarik keluar sama aku aja orangnya'.",
           },
           {
             type: "sent",
-            text: "Terus inget ga teh waktu itu kita ke kopi shop ramean, kamu naik motor ma bagja? aku denger kamu bilang 'ih bagja rambut aing jadi lepek' semacam itulah pokoknya, jadi mikir 'yaudah deh pupus harapan sbg anak yg motor bgt ini wk' gitu.",
+            text: "Terus inget ga teh, waktu itu kita ke Coffee Shop ramean, kamu naik motor bareng Bagja? Aku sempat denger kamu bilang, 'ih Bagja, rambut aing jadi lepek', aku jadi mikir, hmm kayaknya aku bukan tipenya deh.",
           },
           {
             type: "sent",
-            text: "Terus lanjut2 teruss sampe kamu sama si jep itu, yang kita kerkel di kopi mana itu kamu ditembak si jep depanku, mana aku motoin jg lagi hh, terus jg kamu sama yang terakhir ini.",
+            text: "Terus lanjut sampe waktu kita nongkrong di kopi mana itu, ramean juga, kamu ditembak si Jep, aku juga sempat motoin hhhh, sampai akhirnya kamu sama cowokmu yang terakhir ini.",
           },
-          { type: "sent", text: "Yaudahh makin2 kupendem dah" },
+          { type: "sent", text: "Semakinn kupendem dah ini jadinya" },
           { type: "sent", text: "tapiiiii." },
           {
             type: "sent",
-            text: "kalo dipikir2 klo dipendem kelamaan kok nyesel jg",
+            text: "kalo dipikir2, klo dipendem kelamaan kok takut nyesel",
           },
           {
             type: "sent",
-            text: "Jadi intinya, sebelum makin lama kupendem, aku mau jujur aja...",
+            text: "Jadi intinya, sebelum makin lama kupendem, mau jujur aja...",
           },
           { type: "sent-special" },
           {
             type: "sent",
-            text: "Maaf ya teh egois tiba2 bilang gini, janji kok abis ini ga lop2 ama reply2 ga penting lagi, yang penting masih bisa temenan kan ya? haha.",
+            text: "Maaf ya teh egois tiba2 bilang gini, janji kok abis ini ga ganggu lagi, tapi yang penting masih bisa temenan kan ya? haha.",
           },
           {
             type: "sent",
@@ -363,7 +370,24 @@
           },
         ];
 
+        // ============================
+        // Variabel Global
+        // ============================
+        const chatScreen = document.getElementById("chat-screen");
+        let chatRendered = false; // menandai chat sudah selesai render
+        let chatTimeouts = []; // simpan semua timeout agar bisa dibersihkan saat close
+
+        // ============================
+        // Fungsi Bersihkan Timeout
+        // ============================
+        function clearAllChatTimeouts() {
+          chatTimeouts.forEach((t) => clearTimeout(t));
+          chatTimeouts = [];
+        }
+
+        // ============================
         // Fungsi ngetik → hapus → ngetik ulang (sent-special)
+        // ============================
         function typeDeleteRetype(bubble, texts, callback) {
           let textIndex = 0;
           let charIndex = 0;
@@ -382,14 +406,16 @@
 
               if (charIndex === currentText.length) {
                 if (textIndex === texts.length - 1) {
-                  // Teks terakhir → jangan hapus, langsung panggil callback
+                  // teks terakhir → panggil callback tanpa hapus
+                  chatRendered = true; // tandai chat sudah selesai
                   if (callback) callback();
                 } else {
-                  // Teks belum terakhir → hapus untuk lanjut ke teks berikutnya
-                  setTimeout(() => {
-                    deleting = true;
-                    step();
-                  }, 800);
+                  chatTimeouts.push(
+                    setTimeout(() => {
+                      deleting = true;
+                      step();
+                    }, 800)
+                  );
                 }
                 return;
               }
@@ -405,25 +431,57 @@
                 deleting = false;
                 textIndex++;
                 if (textIndex >= texts.length) {
+                  chatRendered = true;
                   if (callback) callback();
                   return;
                 }
               }
             }
 
-            let delay = deleting ? 40 : 50 + Math.random() * 30; // lebih cepat
-            setTimeout(step, delay);
+            let delay = deleting ? 40 : 50 + Math.random() * 30;
+            chatTimeouts.push(setTimeout(step, delay));
           }
 
           step();
         }
 
-        // Start chat
+        // ============================
+        // Mulai Chat Sequence
+        // ============================
         function startChatSequence(index = 0) {
-          chatScreen.innerHTML = "";
-          showChatSequence(chatSequence, index);
+          clearAllChatTimeouts(); // hentikan semua timeout lama
+
+          if (!chatRendered) {
+            chatScreen.innerHTML = "";
+            showChatSequence(chatSequence, index);
+          } else {
+            // Jika chat sudah selesai, langsung tampilkan semua
+            chatScreen.innerHTML = "";
+            chatSequence.forEach((chat) => {
+              const bubble = document.createElement("div");
+              bubble.className =
+                "chat-bubble " +
+                (chat.type.startsWith("sent") ? "sent" : "received");
+              if (chat.type === "sent-special") {
+                bubble.textContent = "Aku tuh seben";
+                // optional: bisa tampilkan teks terakhir sent-special
+                bubble.textContent =
+                  "Aku suka sama kamu dari lama teh, suka banget sama kamu. Tapi cuman bisa merhatiin dari jauh, dari story sama reply2 aja. ku sadar diri kok teh, ini juga aku cuma pengen ngutarain perasaan aja, sumpah. bukan buat nembak atau minta jawaban, jadi teteh gaboleh nolak juga hehe.";
+              } else {
+                bubble.textContent = chat.text || "";
+              }
+              chatScreen.appendChild(bubble);
+            });
+            chatScreen.scrollTo({
+              top: chatScreen.scrollHeight,
+              behavior: "smooth",
+            });
+          }
         }
 
+        // ============================
+        // Render Sequence Satu Per Satu
+        // ============================
         function showChatSequence(chats, index) {
           if (index >= chats.length) return;
           const chat = chats[index];
@@ -442,12 +500,13 @@
                   top: chatScreen.scrollHeight,
                   behavior: "smooth",
                 });
-
                 let delay = 20 + Math.random() * 40;
-                if (Math.random() < 0.15) delay += 200; // pause ragu
-                setTimeout(typeChar, delay);
+                if (Math.random() < 0.15) delay += 200;
+                chatTimeouts.push(setTimeout(typeChar, delay));
               } else {
-                setTimeout(() => showChatSequence(chats, index + 1), 800);
+                chatTimeouts.push(
+                  setTimeout(() => showChatSequence(chats, index + 1), 800)
+                );
               }
             }
             typeChar();
@@ -461,19 +520,22 @@
               behavior: "smooth",
             });
 
-            setTimeout(() => {
-              typingBubble.remove();
-              const bubble = document.createElement("div");
-              bubble.className = "chat-bubble received";
-              bubble.textContent = chat.text;
-              chatScreen.appendChild(bubble);
-              chatScreen.scrollTo({
-                top: chatScreen.scrollHeight,
-                behavior: "smooth",
-              });
-
-              setTimeout(() => showChatSequence(chats, index + 1), 1200);
-            }, 2500 + Math.random() * 2000);
+            chatTimeouts.push(
+              setTimeout(() => {
+                typingBubble.remove();
+                const bubble = document.createElement("div");
+                bubble.className = "chat-bubble received";
+                bubble.textContent = chat.text;
+                chatScreen.appendChild(bubble);
+                chatScreen.scrollTo({
+                  top: chatScreen.scrollHeight,
+                  behavior: "smooth",
+                });
+                chatTimeouts.push(
+                  setTimeout(() => showChatSequence(chats, index + 1), 1200)
+                );
+              }, 2500 + Math.random() * 2000)
+            );
           } else if (chat.type === "sent-special") {
             const bubble = document.createElement("div");
             bubble.className = "chat-bubble sent";
@@ -483,12 +545,24 @@
               bubble,
               [
                 "Aku tuh seben",
-                "Aku suka sama kamu dari lama teh, suka banget. Cuman bisa merhatiin dari jauh, reply & lop2 story doang. Aku cuma pengen ngutarain perasaan kok ini, bukan buat nembak atau minta jawaban, jadi teteh gaboleh nolak juga hehe.",
+                "Aku suka sama kamu dari lama teh, suka banget sama kamu. Tapi cuman bisa merhatiin dari jauh, dari story sama reply2 aja. ku sadar diri kok teh, ini juga aku cuma pengen ngutarain perasaan aja, sumpah. bukan buat nembak atau minta jawaban, jadi teteh gaboleh nolak juga hehe.",
               ],
-              () => setTimeout(() => showChatSequence(chats, index + 1), 800)
+              () => {
+                chatTimeouts.push(
+                  setTimeout(() => showChatSequence(chats, index + 1), 800)
+                );
+              }
             );
           }
         }
+
+        // ============================
+        // Optional: tombol close HP
+        // ============================
+        overlayHp.querySelector(".close-btn").addEventListener("click", () => {
+          overlayHp.classList.remove("active");
+          clearAllChatTimeouts(); // hentikan semua typing saat close
+        });
 
         // Dialog Box Logic
         let typingInterval;
@@ -515,4 +589,3 @@
     </script>
   </body>
 </html>
-
