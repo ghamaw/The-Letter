@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    />
+    <title>The Letter That I Never Sent</title>
+
+    <link rel="icon" href="data:," />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- map -->
+    <map id="image-map" name="image-map" style="display: none">
+      <area
+        alt="foto"
+        title="foto"
+        href="#"
+        coords="77,1452,151,1517,259,1426,182,1353"
+        shape="poly"
+      />
+      <area
+        alt="hp"
+        title="hp"
+        href="#"
+        coords="112,774,112,814,193,815,190,774"
+        shape="poly"
+      />
+      <area
+        target=""
+        alt="orang"
+        title="orang"
+        href=""
+        coords="90,579,74,571,59,441,298,195,314,209,330,219,344,226,362,235,374,241,388,254,395,273,393,298,392,327,395,337,404,342,537,253,925,542,853,657,864,665,880,668,896,671,911,695,931,705,951,707,965,707,989,709,1006,713,1022,718,1023,1100,1021,1138,925,1251,889,1266"
+        shape="poly"
+      />
+      <area
+        target=""
+        alt="tisu"
+        title="tisu"
+        href=""
+        coords="21,397,20,382,116,285,159,318,160,330,64,430"
+        shape="poly"
+      />
+    </map>
+    <img
+      id="preload-img"
+      src="assets/images/kamarY.png"
+      alt=""
+      style="display: none"
+    />
+    <div id="svg-wrap"></div>
+
+    <audio id="bg-music" src="assets/audio/music.mp3" loop hidden></audio>
+    <button id="toggle-music" class="retro-btn">🔇 Off</button>
+
+    <!-- Dialog Box -->
+    <div id="dialog-box" class="dialog-box">
+      <div class="dialog-content" id="dialog-content"></div>
+      <button class="dialog-close" id="dialog-close">✕</button>
+    </div>
+
+    <!-- overlay polaroid -->
+    <div id="overlay-polaroid" class="overlay">
+      <div class="card" id="carousel-card">
+        <button class="close-btn" id="close-polaroid">✕</button>
+        <div class="carousel">
+          <button class="carousel-prev">◀</button>
+          <button class="carousel-next">▶</button>
+        </div>
+        <img id="popup-img" src="" alt="popup content" />
+        <p id="popup-caption"></p>
+      </div>
+    </div>
+
+    <!-- overlay HP chat -->
+    <div class="overlay" id="overlay-hp">
+      <div class="hp-card">
+        <div class="hp-header">
+          <img src="assets/images/profile.jpeg" alt="profile" class="avatar" />
+          <div class="contact-info">
+            <div class="contact-name">Yantii 🌸</div>
+            <div class="contact-status">online</div>
+          </div>
+          <button class="close-btn">✕</button>
+        </div>
+        <div class="hp-screen" id="chat-screen"></div>
+      </div>
+    </div>
+    <!-- 
+    <script>
+      (function () {
+        // Initiate
+        const mapEl = document.getElementById("image-map");
+        const areas = Array.from(mapEl.querySelectorAll("area"));
+        const preload = document.getElementById("preload-img");
+        const wrap = document.getElementById("svg-wrap");
+        const music = document.getElementById("bg-music");
+        const toggleBtn = document.getElementById("toggle-music");
+
+        // auto play ketika halaman terbuka (kalau diijinkan browser)
+        window.addEventListener("load", () => {
+          music.play().catch(() => {
+            // kalau autoplay diblokir, biarkan tombol manual
+            console.log("Autoplay diblokir browser, tekan tombol untuk play.");
+          });
+        });
+
+        toggleBtn.addEventListener("click", () => {
+          if (music.paused) {
+            music.play();
+            toggleBtn.textContent = "🔊 On";
+            toggleBtn.classList.add("on"); // aktifkan animasi glow
+          } else {
+            music.pause();
+            toggleBtn.textContent = "🔇 Off";
+            toggleBtn.classList.remove("on"); // matikan animasi glow
+          }
+        });
+
+        // Polaroid
+        const overlayPolaroid = document.getElementById("overlay-polaroid");
+        const card = document.getElementById("carousel-card");
+        const popupImg = document.getElementById("popup-img");
+        const popupCaption = document.getElementById("popup-caption");
+
+        // Chat HP
+        const overlayHp = document.getElementById("overlay-hp");
+        const chatScreen = document.getElementById("chat-screen");
+
+        // Dialog Box
+        const dialogBox = document.getElementById("dialog-box");
+        const dialogContent = document.getElementById("dialog-content");
+        const dialogClose = document.getElementById("dialog-close");
+
+        // Polaroid Logic
+        const polaroidPhotos = [
+          {
+            src: "assets/images/1.png",
+            caption: "Yanti pinjam hpk untuk selpi, cantik ya? wk",
+          },
+          {
+            src: "assets/images/2.JPG",
+            caption: "Yanti senyum di perpus telkom",
+          },
+          { src: "assets/images/3.JPG", caption: "Sama, tapi lagi capek aja" },
+          {
+            src: "assets/images/4.JPG",
+            caption: "Yanti sedang tertawa di kos",
+          },
+          { src: "assets/images/5.JPG", caption: "Yanti mode serius" },
+          {
+            src: "assets/images/6.JPG",
+            caption: "Yanti menekuni makul sir anton",
+          },
+          { src: "assets/images/7.JPG", caption: "Yanti mode ibu2" },
+          { src: "assets/images/8.png", caption: "Yanti lagi jual mahal" },
+          {
+            src: "assets/images/9.png",
+            caption: "Yanti ngomong sama zayn bojongsoang",
+          },
+        ];
+        let currentIndex = 0;
+
+        function showPhoto(index) {
+          if (index < 0) index = polaroidPhotos.length - 1;
+          if (index >= polaroidPhotos.length) index = 0;
+          currentIndex = index;
+          popupImg.src = polaroidPhotos[index].src;
+          popupCaption.textContent = polaroidPhotos[index].caption;
+
+          if (!card.style.getPropertyValue("--initial-tilt")) {
+            card.style.setProperty("--initial-tilt", "2deg");
+          }
+          card.style.setProperty(
+            "--tilt",
+            (Math.random() * 8 - 4).toFixed(2) + "deg"
+          );
+        }
+
+        // Tutup semua popup sebelum buka yang baru
+        function closeAllPopups() {
+          overlayPolaroid.classList.remove("active");
+          overlayHp.classList.remove("active");
+          dialogBox.classList.remove("active");
+        }
+
+        // Buat SVG area klik
+        function createSVG(naturalW, naturalH, src) {
+          const svgNS = "http://www.w3.org/2000/svg";
+          const svg = document.createElementNS(svgNS, "svg");
+          svg.setAttribute("viewBox", `0 0 ${naturalW} ${naturalH}`);
+          svg.setAttribute("preserveAspectRatio", "xMinYMid slice");
+
+          const image = document.createElementNS(svgNS, "image");
+          image.setAttribute("href", src);
+          image.setAttribute("width", naturalW);
+          image.setAttribute("height", naturalH);
+          svg.appendChild(image);
+
+          areas.forEach((area) => {
+            const shape = area.getAttribute("shape");
+            const coords = area.getAttribute("coords").split(",").map(Number);
+            let el;
+            if (shape === "poly") {
+              el = document.createElementNS(svgNS, "polygon");
+              const points = coords.reduce((acc, val, i) => {
+                return (
+                  acc +
+                  val +
+                  (i % 2 === 0 ? "," : i < coords.length - 1 ? " " : "")
+                );
+              }, "");
+              el.setAttribute("points", points);
+            }
+            el.classList.add("hot");
+            el.setAttribute("data-label", area.getAttribute("alt"));
+            svg.appendChild(el);
+
+            // Klik area
+            el.addEventListener("click", (e) => {
+              e.stopPropagation();
+              const label = area.getAttribute("alt");
+
+              if (label === "foto") {
+                closeAllPopups();
+                showPhoto(0);
+                overlayPolaroid.classList.add("active");
+              } else if (label === "hp") {
+                closeAllPopups();
+                overlayHp.classList.add("active");
+                startChatSequence(0);
+              } else if (label === "orang") {
+                closeAllPopups();
+                showDialog("Orangnya lagi malu...\n");
+              } else if (label === "tisu") {
+                closeAllPopups();
+                showDialog(
+                  "Kamu menemukan sebuah tisu.\nMungkin berguna nanti jika mas agam menangis, Wkwk."
+                );
+              }
+            });
+          });
+
+          wrap.innerHTML = "";
+          wrap.appendChild(svg);
+        }
+
+        preload.onload = () =>
+          createSVG(preload.naturalWidth, preload.naturalHeight, preload.src);
+        if (preload.complete && preload.naturalWidth) {
+          createSVG(preload.naturalWidth, preload.naturalHeight, preload.src);
+        }
+
+        // Close overlays
+        document
+          .getElementById("close-polaroid")
+          .addEventListener("click", () =>
+            overlayPolaroid.classList.remove("active")
+          );
+        overlayPolaroid.addEventListener("click", (e) => {
+          if (e.target === overlayPolaroid)
+            overlayPolaroid.classList.remove("active");
+        });
+
+        overlayHp
+          .querySelector(".close-btn")
+          .addEventListener("click", () =>
+            overlayHp.classList.remove("active")
+          );
+        overlayHp.addEventListener("click", (e) => {
+          if (e.target === overlayHp) overlayHp.classList.remove("active");
+        });
+
+        // carousel
+        document
+          .querySelector(".carousel-prev")
+          .addEventListener("click", (e) => {
+            e.stopPropagation();
+            showPhoto(currentIndex - 1);
+          });
+        document
+          .querySelector(".carousel-next")
+          .addEventListener("click", (e) => {
+            e.stopPropagation();
+            showPhoto(currentIndex + 1);
+          });
+
+        // swipe mobile
+        let startX = 0;
+        popupImg.addEventListener("touchstart", (e) => {
+          startX = e.touches[0].clientX;
+        });
+        popupImg.addEventListener("touchend", (e) => {
+          const endX = e.changedTouches[0].clientX;
+          if (startX - endX > 50) showPhoto(currentIndex + 1);
+          else if (endX - startX > 50) showPhoto(currentIndex - 1);
+        });
+
+        // Chat HP Logic
+        const chatSequence = [
+          { type: "sent", text: "Teh yantiii..." },
+          { type: "received", text: "Gimana mas agamm?" },
+          { type: "sent", text: "Boleh ngomong sesuatu ga?" },
+          { type: "received", text: "Apatuu?" },
+          { type: "sent", text: "Tapi jangan marah ya wkw" },
+          { type: "received", text: "iya ga marah" },
+          { type: "received", text: "mau ngomong apa toh mas agam?" },
+          {
+            type: "sent",
+            text: "Aku tuh sebenernya dari dulu mau ngomong sesuatu...",
+          },
+          { type: "sent", text: "Cuman ga pernah kesampean aja" },
+          {
+            type: "sent",
+            text: "Sebenernya, aku tu waktu awal masuk mb-1 ",
+          },
+          {
+            type: "sent",
+            text: "Waktu ngeliat kamu teteh tu kayak 'anjir ni orang cantik juga lama2'.",
+          },
+          {
+            type: "sent",
+            text: "Yauda tu di awal cuman bisa sekedar merhatiin aja, terus motoin teteh dari jauh wk maap yak tapi sumpah udah banyak kehapus semua kok, di hp lama juga soalnya kebanyakan.",
+          },
+          {
+            type: "sent",
+            text: "Sampe akhirnya beraniin buat ngajak keluar nyari hadiah itu wkw, ai kamu cuma ketawa kecil2 doang.",
+          },
+          {
+            type: "sent",
+            text: "Aku beberapa kali kan itu ngajak km, tpi gapernah diiyain kadang malah harus spam chat dulu huhu baru dibales, soalnya rencananya emang mau nembak kalo dah maen berdua sering gitu hahaha.",
+          },
+          {
+            type: "sent",
+            text: "Sampe di titik, 'ah ini mah gabakal mau sama aku juga orangnya'.",
+          },
+          {
+            type: "sent",
+            text: "Terus inget ga teh waktu itu kita ke kopi shop ramean, kamu naik motor ma bagja? aku denger kamu bilang 'ih bagja rambut aing jadi lepek' semacam itulah pokoknya, jadi mikir 'yaudah deh pupus gw yg anak motor bgt ini wk' gitu.",
+          },
+          {
+            type: "sent",
+            text: "Terus lanjut2 teruss sampe kamu sama si jep itu, yang kita kerkel di kopi mana itu kamu ditembak si jep depanku, mana aku motoin jg lagi hh, terus jg kamu sama yang terakhir itu.",
+          },
+          { type: "sent", text: "Yaudahh makin2 kupendem dah itu" },
+          {
+            type: "sent",
+            text: "tapiiiii.",
+          },
+          {
+            type: "sent",
+            text: "kalo dipikir2 klo dipendem kelamaan kok nyesel jg, jd aku cuman mau bilang.",
+          },
+          {
+            type: "sent",
+            text: "aku suka sama kamu dari lama teh, suka bgtt, cuma bisa merhatiin dari jauh, reply2 & lop2 story doang, cuman tau kok aku sadar diri orangnya jadi ini cuman mau ngutarain aja bukan nembak teteh ini sumpah, jadi teteh gaboleh nolak juga AKWKW.",
+          },
+          {
+            type: "sent",
+            text: "Maaf ya teh egois tiba2 bilang gini, janji kok abis ini ga lop2 ama reply2 ga penting lagi, yang penting masih bisa temenan kan ya? haha.",
+          },
+          {
+            type: "sent",
+            text: "Di-read aja gausah dijawab gpp kok, emang mau ngomong aja biar lega hehe, maaf yak.",
+          },
+        ];
+
+        function typeDeleteRetype(bubble, texts, callback) {
+  let textIndex = 0;
+  let charIndex = 0;
+  let deleting = false;
+
+  function step() {
+    const currentText = texts[textIndex];
+
+    if (!deleting) {
+      // efek ngetik
+      bubble.textContent = currentText.slice(0, charIndex + 1);
+      charIndex++;
+      if (charIndex === currentText.length) {
+        // selesai ketik, tunggu bentar lalu hapus
+        setTimeout(() => {
+          deleting = true;
+          step();
+        }, 1000);
+        return;
+      }
+    } else {
+      // efek hapus
+      bubble.textContent = currentText.slice(0, charIndex - 1);
+      charIndex--;
+      if (charIndex === 0) {
+        // selesai hapus → lanjut ke teks berikutnya
+        deleting = false;
+        textIndex++;
+        if (textIndex >= texts.length) {
+          if (callback) callback();
+          return;
+        }
+      }
+    }
+
+    // jeda random biar natural
+    let delay = deleting ? 60 : 80 + Math.random() * 50;
+    setTimeout(step, delay);
+  }
+
+  step();
+}
+
+        function startChatSequence(index = 0) {
+          chatScreen.innerHTML = "";
+          clearInterval(typingInterval); // stop interval lama biar tidak dobel
+          showChatSequence(chatSequence, index);
+        }
+
+        function showChatSequence(chats, index) {
+          if (index >= chats.length) return;
+          const chat = chats[index];
+
+          if (chat.type === "sent") {
+            // Efek typing natural untuk kita sendiri
+            const bubble = document.createElement("div");
+            bubble.className = "chat-bubble sent";
+            chatScreen.appendChild(bubble);
+
+            let i = 0;
+            function typeChar() {
+              if (i < chat.text.length) {
+                bubble.textContent += chat.text.charAt(i);
+                i++;
+                chatScreen.scrollTo({
+                  top: chatScreen.scrollHeight,
+                  behavior: "smooth",
+                });
+
+                // jeda random, kadang lebih lama biar keliatan mikir
+                let delay = 40 + Math.random() * 80;
+                if (Math.random() < 0.15) delay += 400; // pause kecil seolah ragu
+                setTimeout(typeChar, delay);
+              } else {
+                setTimeout(() => showChatSequence(chats, index + 1), 1000);
+              }
+            }
+            typeChar();
+          } else if (chat.type === "received") {
+            // "Yanti sedang mengetik..."
+            const typingBubble = document.createElement("div");
+            typingBubble.className = "chat-bubble received typing";
+            typingBubble.textContent = "Yanti sedang mengetik";
+            chatScreen.appendChild(typingBubble);
+
+            chatScreen.scrollTo({
+              top: chatScreen.scrollHeight,
+              behavior: "smooth",
+            });
+
+            // Delay seolah Yanti buka HP dulu
+            setTimeout(() => {
+              typingBubble.textContent = "";
+              typingBubble.classList.remove("typing");
+
+              // langsung isi pesan penuh tanpa animasi ketik
+              typingBubble.textContent = chat.text;
+
+              setTimeout(() => showChatSequence(chats, index + 1), 1200);
+            }, 2500 + Math.random() * 1500); // lama Yanti bales, random biar natural
+          } else if (chat.type === "sent-special") {
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble sent";
+  chatScreen.appendChild(bubble);
+
+  // Efek ngetik -> hapus -> ngetik ulang
+  typeDeleteRetype(
+    bubble,
+    ["Aku suka", "Aku suka kamu, suka bgt ❤️"],
+    () => setTimeout(() => showChatSequence(chats, index + 1), 1200)
+  );
+}
+ 
+          
+        }
+
+        // Dialog Box Logic
+        let typingInterval;
+        function showDialog(text) {
+          if (typingInterval) clearInterval(typingInterval); // stop interval lama
+          dialogContent.textContent = "";
+          dialogBox.classList.add("active");
+
+          let i = 0;
+          typingInterval = setInterval(() => {
+            dialogContent.textContent += text.charAt(i);
+            i++;
+            if (i >= text.length) {
+              clearInterval(typingInterval);
+              typingInterval = null;
+            }
+          }, 40);
+        }
+
+        dialogClose.addEventListener("click", () => {
+          dialogBox.classList.remove("active");
+        });
+      })();
+    </script> -->
+
+    <script>
+      (function () {
+        // Initiate
+        const mapEl = document.getElementById("image-map");
+        const areas = Array.from(mapEl.querySelectorAll("area"));
+        const preload = document.getElementById("preload-img");
+        const wrap = document.getElementById("svg-wrap");
+        const music = document.getElementById("bg-music");
+        const toggleBtn = document.getElementById("toggle-music");
+
+        // auto play ketika halaman terbuka (kalau diijinkan browser)
+        window.addEventListener("load", () => {
+          music.play().catch(() => {
+            console.log("Autoplay diblokir browser, tekan tombol untuk play.");
+          });
+        });
+
+        toggleBtn.addEventListener("click", () => {
+          if (music.paused) {
+            music.play();
+            toggleBtn.textContent = "🔊 On";
+            toggleBtn.classList.add("on");
+          } else {
+            music.pause();
+            toggleBtn.textContent = "🔇 Off";
+            toggleBtn.classList.remove("on");
+          }
+        });
+
+        // Polaroid
+        const overlayPolaroid = document.getElementById("overlay-polaroid");
+        const card = document.getElementById("carousel-card");
+        const popupImg = document.getElementById("popup-img");
+        const popupCaption = document.getElementById("popup-caption");
+
+        // Chat HP
+        const overlayHp = document.getElementById("overlay-hp");
+        const chatScreen = document.getElementById("chat-screen");
+
+        // Dialog Box
+        const dialogBox = document.getElementById("dialog-box");
+        const dialogContent = document.getElementById("dialog-content");
+        const dialogClose = document.getElementById("dialog-close");
+
+        // Polaroid Logic
+        const polaroidPhotos = [
+          {
+            src: "assets/images/1.png",
+            caption: "Yanti pinjam hpk untuk selpi, cantik ya? wk",
+          },
+          {
+            src: "assets/images/2.JPG",
+            caption: "Yanti senyum di perpus telkom",
+          },
+          { src: "assets/images/3.JPG", caption: "Sama, tapi lagi capek aja" },
+          {
+            src: "assets/images/4.JPG",
+            caption: "Yanti sedang tertawa di kos",
+          },
+          { src: "assets/images/5.JPG", caption: "Yanti mode serius" },
+          {
+            src: "assets/images/6.JPG",
+            caption: "Yanti menekuni makul sir anton",
+          },
+          { src: "assets/images/7.JPG", caption: "Yanti mode ibu2" },
+          { src: "assets/images/8.png", caption: "Yanti lagi jual mahal" },
+          {
+            src: "assets/images/9.png",
+            caption: "Yanti ngomong sama zayn bojongsoang",
+          },
+        ];
+        let currentIndex = 0;
+
+        // Show Photo
+        function showPhoto(index) {
+          if (index < 0) index = polaroidPhotos.length - 1;
+          if (index >= polaroidPhotos.length) index = 0;
+          currentIndex = index;
+          popupImg.src = polaroidPhotos[index].src;
+          popupCaption.textContent = polaroidPhotos[index].caption;
+
+          if (!card.style.getPropertyValue("--initial-tilt")) {
+            card.style.setProperty("--initial-tilt", "2deg");
+          }
+          card.style.setProperty(
+            "--tilt",
+            (Math.random() * 8 - 4).toFixed(2) + "deg"
+          );
+        }
+
+        // Tutup semua popup sebelum buka yang baru
+        function closeAllPopups() {
+          overlayPolaroid.classList.remove("active");
+          overlayHp.classList.remove("active");
+          dialogBox.classList.remove("active");
+        }
+
+        // Buat SVG area klik
+        function createSVG(naturalW, naturalH, src) {
+          const svgNS = "http://www.w3.org/2000/svg";
+          const svg = document.createElementNS(svgNS, "svg");
+          svg.setAttribute("viewBox", `0 0 ${naturalW} ${naturalH}`);
+          svg.setAttribute("preserveAspectRatio", "xMinYMid slice");
+
+          const image = document.createElementNS(svgNS, "image");
+          image.setAttribute("href", src);
+          image.setAttribute("width", naturalW);
+          image.setAttribute("height", naturalH);
+          svg.appendChild(image);
+
+          areas.forEach((area) => {
+            const shape = area.getAttribute("shape");
+            const coords = area.getAttribute("coords").split(",").map(Number);
+            let el;
+            if (shape === "poly") {
+              el = document.createElementNS(svgNS, "polygon");
+              const points = coords.reduce((acc, val, i) => {
+                return (
+                  acc +
+                  val +
+                  (i % 2 === 0 ? "," : i < coords.length - 1 ? " " : "")
+                );
+              }, "");
+              el.setAttribute("points", points);
+            }
+            el.classList.add("hot");
+            el.setAttribute("data-label", area.getAttribute("alt"));
+            svg.appendChild(el);
+
+            el.addEventListener("click", (e) => {
+              e.stopPropagation();
+              const label = area.getAttribute("alt");
+
+              if (label === "foto") {
+                closeAllPopups();
+                showPhoto(0);
+                overlayPolaroid.classList.add("active");
+              } else if (label === "hp") {
+                closeAllPopups();
+                overlayHp.classList.add("active");
+                startChatSequence(0);
+              } else if (label === "orang") {
+                closeAllPopups();
+                showDialog("Orangnya lagi malu...\n");
+              } else if (label === "tisu") {
+                closeAllPopups();
+                showDialog(
+                  "Kamu menemukan sebuah tisu.\nMungkin berguna nanti jika mas agam menangis, Wkwk."
+                );
+              }
+            });
+          });
+
+          wrap.innerHTML = "";
+          wrap.appendChild(svg);
+        }
+
+        preload.onload = () =>
+          createSVG(preload.naturalWidth, preload.naturalHeight, preload.src);
+        if (preload.complete && preload.naturalWidth) {
+          createSVG(preload.naturalWidth, preload.naturalHeight, preload.src);
+        }
+
+        // Close overlays
+        document
+          .getElementById("close-polaroid")
+          .addEventListener("click", () =>
+            overlayPolaroid.classList.remove("active")
+          );
+        overlayPolaroid.addEventListener("click", (e) => {
+          if (e.target === overlayPolaroid)
+            overlayPolaroid.classList.remove("active");
+        });
+
+        overlayHp
+          .querySelector(".close-btn")
+          .addEventListener("click", () =>
+            overlayHp.classList.remove("active")
+          );
+        overlayHp.addEventListener("click", (e) => {
+          if (e.target === overlayHp) overlayHp.classList.remove("active");
+        });
+
+        // carousel
+        document
+          .querySelector(".carousel-prev")
+          .addEventListener("click", (e) => {
+            e.stopPropagation();
+            showPhoto(currentIndex - 1);
+          });
+        document
+          .querySelector(".carousel-next")
+          .addEventListener("click", (e) => {
+            e.stopPropagation();
+            showPhoto(currentIndex + 1);
+          });
+
+        // swipe mobile
+        let startX = 0;
+        popupImg.addEventListener("touchstart", (e) => {
+          startX = e.touches[0].clientX;
+        });
+        popupImg.addEventListener("touchend", (e) => {
+          const endX = e.changedTouches[0].clientX;
+          if (startX - endX > 50) showPhoto(currentIndex + 1);
+          else if (endX - startX > 50) showPhoto(currentIndex - 1);
+        });
+
+        // Chat HP Logic
+        const chatSequence = [
+          { type: "sent", text: "Teh yantiii..." },
+          { type: "received", text: "Gimana mas agamm?" },
+          { type: "sent", text: "Boleh ngomong sesuatu ga?" },
+          { type: "received", text: "Apatuu?" },
+          { type: "sent", text: "Tapi jangan marah ya wkw" },
+          { type: "received", text: "iya ga marah" },
+          { type: "received", text: "mau ngomong apa toh mas agam?" },
+          {
+            type: "sent",
+            text: "Aku tuh sebenernya dari dulu mau ngomong sesuatu...",
+          },
+          { type: "sent", text: "Cuman ga pernah kesampean aja" },
+          { type: "sent", text: "Sebenernya, aku tu waktu awal masuk mb-1," },
+          {
+            type: "sent",
+            text: "pas pertama liat kamu tuh aku kepikiran 'wah orangnya kayak beda aja gitu'.",
+          },
+          {
+            type: "sent",
+            text: "Jadi awal2 mah cuman bisa sekedar merhatiin aja, kadang suka ngefoto juga dari jauh wk, maap yaa... tapi udah banyak yang kehapus kok soalnya di hp lama.",
+          },
+          {
+            type: "sent",
+            text: "Sampe akhirnya beraniin buat ngajak keluar nyari hadiah itu wkw, ai kamu cuma ketawa kecil2 doang.",
+          },
+          {
+            type: "sent",
+            text: "Aku beberapa kali coba ngajak kamu keluar, tapi emang ga pernah kesampean, kadang harus nunggu lama atau spam chat baru dibales wkw.",
+          },
+          {
+            type: "sent",
+            text: "Sampe di titik, 'ah ini mah gabakal mau sama aku juga orangnya'.",
+          },
+          {
+            type: "sent",
+            text: "Terus inget ga teh waktu itu kita ke kopi shop ramean, kamu naik motor ma bagja? aku denger kamu bilang 'ih bagja rambut aing jadi lepek' semacam itulah pokoknya, jadi mikir 'yaudah deh pupus harapan sbg anak yg motor bgt ini wk' gitu.",
+          },
+          {
+            type: "sent",
+            text: "Terus lanjut2 teruss sampe kamu sama si jep itu, yang kita kerkel di kopi mana itu kamu ditembak si jep depanku, mana aku motoin jg lagi hh, terus jg kamu sama yang terakhir ini.",
+          },
+          { type: "sent", text: "Yaudahh makin2 kupendem dah" },
+          { type: "sent", text: "tapiiiii." },
+          {
+            type: "sent",
+            text: "kalo dipikir2 klo dipendem kelamaan kok nyesel jg",
+          },
+          {
+            type: "sent",
+            text: "Jadi intinya, sebelum makin lama kupendem, aku mau jujur aja...",
+          },
+          { type: "sent-special" },
+          {
+            type: "sent",
+            text: "Maaf ya teh egois tiba2 bilang gini, janji kok abis ini ga lop2 ama reply2 ga penting lagi, yang penting masih bisa temenan kan ya? haha.",
+          },
+          {
+            type: "sent",
+            text: "Di-read aja gausah dijawab gpp kok, emang mau ngomong aja biar lega hehe, maaf yak.",
+          },
+        ];
+
+        // Fungsi ngetik → hapus → ngetik ulang (sent-special)
+        function typeDeleteRetype(bubble, texts, callback) {
+          let textIndex = 0;
+          let charIndex = 0;
+          let deleting = false;
+
+          function step() {
+            const currentText = texts[textIndex];
+
+            if (!deleting) {
+              bubble.textContent = currentText.slice(0, charIndex + 1);
+              charIndex++;
+              chatScreen.scrollTo({
+                top: chatScreen.scrollHeight,
+                behavior: "smooth",
+              });
+
+              if (charIndex === currentText.length) {
+                if (textIndex === texts.length - 1) {
+                  // Teks terakhir → jangan hapus, langsung panggil callback
+                  if (callback) callback();
+                } else {
+                  // Teks belum terakhir → hapus untuk lanjut ke teks berikutnya
+                  setTimeout(() => {
+                    deleting = true;
+                    step();
+                  }, 800);
+                }
+                return;
+              }
+            } else {
+              bubble.textContent = currentText.slice(0, charIndex - 1);
+              charIndex--;
+              chatScreen.scrollTo({
+                top: chatScreen.scrollHeight,
+                behavior: "smooth",
+              });
+
+              if (charIndex === 0) {
+                deleting = false;
+                textIndex++;
+                if (textIndex >= texts.length) {
+                  if (callback) callback();
+                  return;
+                }
+              }
+            }
+
+            let delay = deleting ? 40 : 50 + Math.random() * 30; // lebih cepat
+            setTimeout(step, delay);
+          }
+
+          step();
+        }
+
+        // Start chat
+        function startChatSequence(index = 0) {
+          chatScreen.innerHTML = "";
+          showChatSequence(chatSequence, index);
+        }
+
+        function showChatSequence(chats, index) {
+          if (index >= chats.length) return;
+          const chat = chats[index];
+
+          if (chat.type === "sent") {
+            const bubble = document.createElement("div");
+            bubble.className = "chat-bubble sent";
+            chatScreen.appendChild(bubble);
+
+            let i = 0;
+            function typeChar() {
+              if (i < chat.text.length) {
+                bubble.textContent += chat.text.charAt(i);
+                i++;
+                chatScreen.scrollTo({
+                  top: chatScreen.scrollHeight,
+                  behavior: "smooth",
+                });
+
+                let delay = 20 + Math.random() * 40;
+                if (Math.random() < 0.15) delay += 200; // pause ragu
+                setTimeout(typeChar, delay);
+              } else {
+                setTimeout(() => showChatSequence(chats, index + 1), 800);
+              }
+            }
+            typeChar();
+          } else if (chat.type === "received") {
+            const typingBubble = document.createElement("div");
+            typingBubble.className = "chat-bubble received typing";
+            typingBubble.textContent = "Yanti sedang mengetik...";
+            chatScreen.appendChild(typingBubble);
+            chatScreen.scrollTo({
+              top: chatScreen.scrollHeight,
+              behavior: "smooth",
+            });
+
+            setTimeout(() => {
+              typingBubble.remove();
+              const bubble = document.createElement("div");
+              bubble.className = "chat-bubble received";
+              bubble.textContent = chat.text;
+              chatScreen.appendChild(bubble);
+              chatScreen.scrollTo({
+                top: chatScreen.scrollHeight,
+                behavior: "smooth",
+              });
+
+              setTimeout(() => showChatSequence(chats, index + 1), 1200);
+            }, 2500 + Math.random() * 2000);
+          } else if (chat.type === "sent-special") {
+            const bubble = document.createElement("div");
+            bubble.className = "chat-bubble sent";
+            chatScreen.appendChild(bubble);
+
+            typeDeleteRetype(
+              bubble,
+              [
+                "Aku tuh seben",
+                "Aku suka sama kamu dari lama teh, suka banget. Cuman bisa merhatiin dari jauh, reply & lop2 story doang. Aku cuma pengen ngutarain perasaan kok ini, bukan buat nembak atau minta jawaban, jadi teteh gaboleh nolak juga hehe.",
+              ],
+              () => setTimeout(() => showChatSequence(chats, index + 1), 800)
+            );
+          }
+        }
+
+        // Dialog Box Logic
+        let typingInterval;
+        function showDialog(text) {
+          if (typingInterval) clearInterval(typingInterval);
+          dialogContent.textContent = "";
+          dialogBox.classList.add("active");
+
+          let i = 0;
+          typingInterval = setInterval(() => {
+            dialogContent.textContent += text.charAt(i);
+            i++;
+            if (i >= text.length) {
+              clearInterval(typingInterval);
+              typingInterval = null;
+            }
+          }, 40);
+        }
+
+        dialogClose.addEventListener("click", () => {
+          dialogBox.classList.remove("active");
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #000;
+}
+/* Default (HP & tablet) → gambar tetap 100% agar muat layar kecil */
+#svg-wrap {
+  width: 100vw;
+  height: 100vh;
+}
+svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Laptop ke atas (misalnya min-width 1024px) → gunakan aturan fix */
+@media (min-width: 1024px) {
+  #svg-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+  }
+  svg {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+  }
+}
+
+.hot {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 4;
+  cursor: pointer;
+  pointer-events: all;
+  transition: fill 0.12s ease, stroke 0.12s ease;
+}
+
+.hot:hover,
+.hot:focus,
+.hot.active {
+  fill: rgba(255, 223, 77, 0.28);
+  stroke: rgba(255, 140, 0, 0.95);
+}
+
+svg image {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Overlay umum */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+  z-index: 99;
+}
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Retro Button */
+.retro-btn {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  padding: 8px 8px;
+  background: #ff4757; /* default merah (off) */
+  color: #fff;
+  border: 4px solid #000;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 #000;
+  z-index: 10;
+  user-select: none;
+  transition: 
+    background 0.3s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+/* Hover = retro pop */
+.retro-btn:hover {
+  transform: scale(1.08);
+  background: #ff6b81;
+  box-shadow: 6px 6px 0 #000;
+}
+
+/* Active click = retro press */
+.retro-btn:active {
+  transform: scale(0.95) translate(3px, 3px);
+  box-shadow: 2px 2px 0 #000;
+}
+
+/* ON state (music playing) */
+.retro-btn.on {
+  background: #2ed573;
+  color: #000;
+  animation: glow 1.2s infinite alternate;
+}
+
+/* Glow effect ala mesin arcade */
+@keyframes glow {
+  0% {
+    box-shadow: 4px 4px 0 #000, 0 0 4px #2ed573, 0 0 12px #2ed573;
+  }
+  100% {
+    box-shadow: 4px 4px 0 #000, 0 0 8px #55efc4, 0 0 20px #55efc4;
+  }
+}
+
+/* Pastikan popup di atas tombol */
+.overlay,
+#dialog-box {
+  z-index: 100;
+}
+
+
+/* Dialog Box Retro */
+.dialog-box {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 90%;
+  max-width: 600px;
+  background: #222;
+  color: #fff;
+  border: 4px solid #fff;
+  border-radius: 12px 12px 0 0;
+  padding: 16px;
+  font-family: "Press Start 2P", monospace, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.4s ease;
+  z-index: 200;
+}
+
+.dialog-box.active {
+  transform: translateX(-50%) translateY(0);
+}
+
+.dialog-content {
+  min-height: 60px;
+  white-space: pre-line;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #fff;
+  color: #222;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Polaroid */
+.card {
+  background: #fff;
+  padding: 10px;
+  border: 12px solid #fff;
+  border-bottom: 40px solid #fff;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: scale(0.9) rotate(var(--initial-tilt, 0deg));
+  transition: transform 1.2s ease, opacity 1s ease; 
+  position: relative;
+  max-width: 75vw;
+  max-height: calc(75vh - 40px);  /* ✅ kurangi border bawah */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Comic Sans MS", cursive;
+  filter: contrast(1.05) saturate(1.1);
+}
+.overlay.active .card {
+  opacity: 1;
+  transform: scale(1) rotate(var(--tilt, 0deg));
+}
+#popup-img {
+  max-width: 100%;
+  max-height: 65vh;   /* ✅ biar tidak mentok bawah */
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.8s ease, opacity 0.8s ease;
+}
+#popup-img:active {
+  transform: scale(0.98) rotate(-1deg);
+}
+#popup-caption {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Carousel */
+.carousel {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 20px;
+  pointer-events: none;
+}
+.carousel button {
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  transition: background 0.3s ease;
+  pointer-events: all;
+}
+.carousel button:hover {
+  background: white;
+}
+
+/* HP Chat */
+.hp-card {
+  background: #111;
+  border: 16px solid #333;
+  border-radius: 32px;
+  width: 90vw;
+  height: 90vh;
+  max-width: 600px;
+  max-height: 100vh;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transform: translateY(40px) scale(0.95);
+  opacity: 0;
+  transition: all 0.45s ease;
+}
+#overlay-hp.active .hp-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.hp-header {
+  background: #075e54;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  position: relative;
+}
+.hp-header .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.hp-header .contact-info {
+  flex-grow: 1;
+}
+.hp-header .contact-name {
+  font-weight: bold;
+}
+.hp-header .contact-status {
+  font-size: 12px;
+  opacity: 0.85;
+}
+.hp-header .close-btn {
+  margin-left: auto;
+}
+.hp-screen {
+  background: #ece5dd;
+  flex-grow: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+.chat-bubble {
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 18px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+/* Efek mengetik ala WhatsApp */
+.chat-bubble.typing {
+  font-style: italic;
+  color: #555;
+  position: relative;
+}
+
+.chat-bubble.typing::after {
+  content: "...";
+  display: inline-block;
+  animation: dots 1.2s steps(4, end) infinite;
+}
+
+@keyframes dots {
+  0%   { content: ""; }
+  25%  { content: "."; }
+  50%  { content: ".."; }
+  75%  { content: "..."; }
+  100% { content: ""; }
+}
+
+.chat-bubble.received {
+  background: #fff;
+  align-self: flex-start;
+  border-top-left-radius: 0;
+}
+.chat-bubble.sent {
+  background: #dcf8c6;
+  align-self: flex-end;
+  border-top-right-radius: 0;
+}
+.chat-photo {
+  max-width: 150px;
+  max-height: 150px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.chat-photo:hover {
+  transform: scale(1.05);
+}
